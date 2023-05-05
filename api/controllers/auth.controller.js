@@ -1,6 +1,7 @@
 // imports
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import nodemon from 'nodemon'
 
 // model imports
 import User from '../models/user.model.js'
@@ -49,5 +50,10 @@ export const login = async (req, res, next) => {
 }
 
 export const logout = async (req, res) => {
-    res.send('res from controller')
+    res.clearCookie("accessToken", {
+        sameSite: "none",
+        secure: true,
+    })
+    .status(200)
+    .send("User has been logged out")
 }
