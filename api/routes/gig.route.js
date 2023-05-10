@@ -1,8 +1,7 @@
 // imports
 import express from 'express'
 
-// controllers 
-
+// controller imports
 import { 
     createGig, 
     deleteGig, 
@@ -12,7 +11,7 @@ import {
 // middlewares
 import { verifyToken } from '../middlewares/jwt.js'
 
-// controller imports
+
 
 const router = express.Router()
 
