@@ -33,6 +33,7 @@ export const getGig = async (req, res, next) => {
     try {
         const gig = await Gig.findById(req.params.id)
         if(!gig) return next(createError(404, "Gig not found"))
+        console.log(gig);
         res.status(200).send(gig)
         
     } catch(err) {
