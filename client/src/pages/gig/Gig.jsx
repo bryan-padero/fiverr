@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Gig.scss";
 import { Slider } from "infinite-react-carousel/lib";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import newRequest from "../../utils/newRequest";
+import axios from "axios";
 
 function Gig() {
 
   const { id } = useParams()
+  const [dataUser, setDataUser] = useState("")
+  const [isLoadingUser, setIsLoadingUser] = useState(false)
+  const [errorUser, setErrorUser] = useState(null)
 
   const { isLoading, error, data } = useQuery({
     queryKey: ['gig'],
@@ -19,15 +23,35 @@ function Gig() {
       })
   })
 
-  const { isLoading: isLoadingUser, error: errorUser, data: dataUser } = useQuery({
-    queryKey: ['user'],
-    queryFn: () =>
-       newRequest
-      .get(`/users/${data.userId}`)
-      .then((res) => {
-        return res.data
-      })
-  })
+  useEffect(() => {
+    const fetchData = async () => {
+     setIsLoadingUser(true)
+     try {
+      const  response = await axios(`http://localhost:3000/api/users/${data.userId}`)
+      setIsLoadingUser(false)
+      setDataUser(response.data)
+      setErrorUser(null)
+     } catch(err) {
+      if(err.name === "Abort Error") {
+        console.log("the fetch was aborted");
+      } else {
+        setIsLoadingUser(false)
+        setErrorUser("Could not fetch the data")
+      }
+     }
+    }
+    fetchData()
+  },[data])
+
+  // const { isLoading: isLoadingUser, error: errorUser, data: dataUser } = useQuery({
+  //   queryKey: ['user'],
+  //   queryFn: () =>
+  //      newRequest
+  //     .get(`/users/${data.userId}`)
+  //     .then((res) => {
+  //       return res.data
+  //     })
+  // })
 
   console.log(dataUser);
 
@@ -59,7 +83,8 @@ function Gig() {
                 ))}
                   <span> {Math.round(data.totalStars / data.starNumber)}</span>
                 </div>)}
-          </div>)}
+          </div> )}
+          {/* )} */}
           <Slider slidesToShow={1} arrowsScroll={1} className="slider">
             { data.images.map((img) => ( 
             <img
