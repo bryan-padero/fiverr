@@ -1,10 +1,15 @@
 // imports
 import express from 'express'
+import { createReview, getReviews, deleteReview } from '../controllers/review.controller.js'
+import { verifyToken } from '../middlewares/jwt.js'
 
 // controller imports
 
 const router = express.Router()
 
-router.get("/test", )
+
+router.post("/", verifyToken, createReview)
+router.get("/:gigId", getReviews)
+router.delete("/:id", deleteReview)
 
 export default router
