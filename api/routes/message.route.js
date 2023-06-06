@@ -1,10 +1,13 @@
 // imports
 import express from 'express'
+import { verifyToken } from '../middlewares/jwt.js'
 
 // controller imports
+import { createMessage, getMessages } from '../controllers/message.controller.js'
 
 const router = express.Router()
 
-router.get("/test", )
+router.post("/", verifyToken, createMessage)
+router.get("/:id", verifyToken, getMessages)
 
 export default router
